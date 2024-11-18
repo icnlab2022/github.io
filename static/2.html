@@ -1,29 +1,60 @@
-<!-- 仅保留需要的内容 -->
-<div class="swiper-container">
-    <div class="swiper-wrapper">
-        <div class="swiper-slide">
-            <img src="../pic/2022-1.jpg" alt="Slide 1">
-        </div>
-        <div class="swiper-slide">
-            <img src="../pic/2024-1.jpg" alt="Slide 2">
-        </div>
-        <div class="swiper-slide">
-            <img src="../pic/2024-2.jpg" alt="Slide 3">
-        </div>
+<div id="news-container" style="display: flex; flex-direction: column; align-items: center;">
+    <div id="news-list" style="width: 100%; max-width: 1000px;">
+        <!-- 新闻信息将通过 JavaScript 动态填充 -->
     </div>
-    <div class="swiper-pagination"></div>
-    <div class="swiper-button-prev"></div>
-    <div class="swiper-button-next"></div>
+    <div id="pagination" style="display: flex; justify-content: space-between; width: 100%; max-width: 1000px; margin-top: 20px;">
+        <span id="prev-btn" style="cursor: pointer; font-size: 24px;" onclick="prevPage()" disabled>&#8592;</span> <!-- 单左箭头 -->
+        <span id="next-btn" style="cursor: pointer; font-size: 24px;" onclick="nextPage()"> &#8594;</span> <!-- 单右箭头 -->
+    </div>
 </div>
 
-<!-- Swiper JS -->
-<script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
 <script>
-    var swiper = new Swiper('.swiper-container', {
-        loop: true,
-        autoplay: {
-            delay: 3000,
-            disableOnInteraction: false,
-        },
-    });
+    const newsData = [
+        { date: "<strong><em>--</em></strong> 22 September 2024", content: "Dr. Xue is awarded the <strong><em>Reviewer Excellence Certificate</em></strong> for Computer Networks!" },
+        { date: "<strong><em>--</em></strong> 10 June 2024", content: "Our manuscript “All-pay Auction Based Profit Maximization in End-to-End Computation Offloading System” is accepted by the <strong><em>IEEE Transactions on Vehicular Technology<strong><em>!" },
+        { date: "<strong><em>--</em></strong> 30 April 2024", content: "Our manuscript “Profit-aware Edge Server Placement based on All-pay Auction for Edge Offloading” is accepted by the <strong><em>2024 IEEE/ACM 32nd International Symposium on Quality of Service (IWQoS)</em></strong>!" },
+        { date: "<strong><em>--</em></strong> 2 September 2023", content: "Our manuscript “Parameter Estimation-Aided Edge Server Selection Mechanism for Edge Task Offloading” is accepted by the <strong><em>IEEE Transactions on Vehicular Technology</em></strong>!" },
+       
+        // 此处可以继续添加更多新闻...
+    ];
+
+    let currentPage = 0;
+    const itemsPerPage = 3;
+
+    function renderNews() {
+        const start = currentPage * itemsPerPage;
+        const end = start + itemsPerPage;
+        const newsToShow = newsData.slice(start, end);
+        
+        const newsList = document.getElementById('news-list');
+        newsList.innerHTML = '';
+        newsToShow.forEach(news => {
+            const newsItem = document.createElement('p');
+            newsItem.style.fontSize = '15px';
+            newsItem.innerHTML = `${news.date}, ${news.content}`;
+            newsList.appendChild(newsItem);
+        });
+        
+        document.getElementById('prev-btn').style.opacity = currentPage === 0 ? 0.5 : 1;
+        document.getElementById('prev-btn').style.pointerEvents = currentPage === 0 ? 'none' : 'auto';
+        document.getElementById('next-btn').style.opacity = end >= newsData.length ? 0.5 : 1;
+        document.getElementById('next-btn').style.pointerEvents = end >= newsData.length ? 'none' : 'auto';
+    }
+
+    function prevPage() {
+        if (currentPage > 0) {
+            currentPage--;
+            renderNews();
+        }
+    }
+
+    function nextPage() {
+        if ((currentPage + 1) * itemsPerPage < newsData.length) {
+            currentPage++;
+            renderNews();
+        }
+    }
+
+    // 初始渲染
+    renderNews();
 </script>
